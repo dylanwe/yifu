@@ -25,10 +25,9 @@ func Init() {
 		panic(err)
 	}
 
-	database.AutoMigrate(&Clothing{})
+	database.AutoMigrate(
+		&Clothing{},
+		&Outfit{},
+	)
 	DB = database
-}
-
-func GetDB() *gorm.DB {
-	return DB
 }
