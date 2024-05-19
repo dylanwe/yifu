@@ -28,6 +28,8 @@ func main() {
 	api := server.Group("/api")
 	clothes := api.Group("/v1/clothes")
 	routes.ClothesRoutes(clothes)
+	outfits := api.Group("/v1/outfits")
+	routes.OutfitsRoutes(outfits)
 
 	fmt.Println("Starting in " + string(c.Mode) + " mode")
 	server.Logger.Fatal(server.Start(":8080"))

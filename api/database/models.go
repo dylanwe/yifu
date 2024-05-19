@@ -11,3 +11,9 @@ type Clothing struct {
 	Category string    `json:"category" gorm:"not null; varchar(100)"`
 	Image    string    `json:"image" gorm:"not null; varchar(255)"`
 }
+
+type Outfit struct {
+	Id       uuid.UUID  `json:"id" gorm:"primary_key; type:uuid; default:gen_random_uuid()"`
+	Name     string     `json:"name" gorm:"not null; varchar(100)"`
+	Clothing []Clothing `json:"clothing" gorm:"many2many:outfit_clothing;"`
+}
