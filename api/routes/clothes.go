@@ -18,28 +18,28 @@ func ClothesRoutes(group *echo.Group) {
 		category := c.FormValue("category")
 		image, err := c.FormFile("image")
 		if err != nil {
-			return c.String(http.StatusBadRequest, "Image is required")
+			return c.JSON(http.StatusBadRequest, Msg{"Image is required"})
 		}
 
 		extension := filepath.Ext(image.Filename)
 		if extension != ".jpg" && extension != ".jpeg" && extension != ".png" {
-			return c.String(http.StatusBadRequest, "Image must be a jpg, jpeg, or png")
+			return c.JSON(http.StatusBadRequest, Msg{"Image must be a jpg, jpeg, or png"})
 		}
 
 		imageUrl, err := image.Open()
 		if err != nil {
-			return c.String(http.StatusBadRequest, "Image is required")
+			return c.JSON(http.StatusInternalServerError, Msg{"Error saving image"})
 		}
 		defer imageUrl.Close()
 
 		dst, err := os.Create("images/" + image.Filename)
 		if err != nil {
-			return c.String(http.StatusInternalServerError, err.Error())
+			return c.JSON(http.StatusInternalServerError, Msg{"Error saving image"})
 		}
 		defer dst.Close()
 
 		if _, err = io.Copy(dst, imageUrl); err != nil {
-			return c.String(http.StatusInternalServerError, err.Error())
+			return c.JSON(http.StatusInternalServerError, Msg{"Error saving image"})
 		}
 
 		f, _ := os.Getwd()
@@ -68,6 +68,11 @@ func ClothesRoutes(group *echo.Group) {
 		id := c.Param("id")
 		var clothing database.Clothing
 		database.DB.Where("id = ?", id).First(&clothing)
+
+		if clothing.Id == uuid.Nil {
+			return c.JSON(http.StatusNotFound, Msg{"Clothing not found"})
+		}
+
 		return c.JSON(http.StatusOK, clothing)
 	})
 
@@ -75,6 +80,11 @@ func ClothesRoutes(group *echo.Group) {
 		id := c.Param("id")
 		var clothing database.Clothing
 		database.DB.Where("id = ?", id).First(&clothing)
+
+		if clothing.Id == uuid.Nil {
+			return c.JSON(http.StatusNotFound, Msg{"Clothing not found"})
+		}
+
 		database.DB.Delete(&clothing)
 		return c.JSON(http.StatusOK, Msg{"Clothing deleted successfully!"})
 	})
