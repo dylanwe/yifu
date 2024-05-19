@@ -19,6 +19,6 @@ func main() {
 	clothes := api.Group("/v1/clothes")
 	routes.ClothesRoutes(clothes)
 
+	fmt.Println("Starting in " + string(c.Mode) + " mode")
 	server.Logger.Fatal(server.Start(":8080"))
-	fmt.Println("Started in " + string(c.Mode) + " mode")
 }
