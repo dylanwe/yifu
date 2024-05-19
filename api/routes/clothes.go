@@ -55,7 +55,7 @@ func ClothesRoutes(group *echo.Group) {
 
 		database.DB.Create(&clothing)
 
-		return c.String(http.StatusCreated, "Clothing created successfully!")
+		return c.JSON(http.StatusCreated, Msg{"Clothing created successfully!"})
 	})
 
 	group.GET("", func(c echo.Context) error {
@@ -76,6 +76,6 @@ func ClothesRoutes(group *echo.Group) {
 		var clothing database.Clothing
 		database.DB.Where("id = ?", id).First(&clothing)
 		database.DB.Delete(&clothing)
-		return c.String(http.StatusOK, "Deleted successfully!")
+		return c.JSON(http.StatusOK, Msg{"Clothing deleted successfully!"})
 	})
 }
