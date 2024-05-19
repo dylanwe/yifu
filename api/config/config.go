@@ -23,7 +23,7 @@ type Config struct {
 var config *Config
 
 func Init() {
-	godotenv.Load()
+	godotenv.Load("../.env")
 	modeEnv := os.Getenv("MODE")
 	dbName := os.Getenv("DB_NAME")
 	dbUser := os.Getenv("DB_USER")
