@@ -1,10 +1,21 @@
-version: "3.19"
+version: "3.9"
 
 services:
-  api:
+  yifu-api:
     build:
       context: ./api
     ports:
       - "8080:8080"
-    container_name: yifu-api
+    depends_on:
+      - yifu-postgres
+    environment:
+      - DB_HOST=yifu-postgres
+  yifu-postgres:
+    image: postgres:16.0-alpine3.17
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
 
