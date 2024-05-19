@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var db *gorm.DB
+var DB *gorm.DB
 
 func Init() {
 	c := config.GetConfig()
@@ -25,9 +25,10 @@ func Init() {
 		panic(err)
 	}
 
-	db = database
+	database.AutoMigrate(&Clothing{})
+	DB = database
 }
 
 func GetDB() *gorm.DB {
-	return db
+	return DB
 }
